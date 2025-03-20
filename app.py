@@ -53,7 +53,16 @@ form_html = """
   <input type="email" name="email" required><br><br>
   <label>Comentario:</label><br>
   <textarea name="message" rows="5" required></textarea><br><br>
-  <button type="submit">Enviar Feedback</button>
+    <button type="submit" 
+          style="background-color: #0077B5; 
+                 color: #ffffff; 
+                 border: none; 
+                 padding: 10px 20px; 
+                 border-radius: 5px; 
+                 cursor: pointer; 
+                 font-size: 16px;">
+    Enviar Feedback
+  </button>
 </form>
 """
 
