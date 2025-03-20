@@ -27,7 +27,7 @@ if uploaded_image is not None:
 
     if st.button("Predict Result"):
         with st.spinner("Analyzing the image..."):
-            url_backend = "https://covid-backend-x534.onrender.com/predict"
+            url_backend = "https://detcovid-backend.onrender.com/predict"
             files = {"file": (uploaded_image.name, uploaded_image.read(), uploaded_image.type)}
 
             try:
