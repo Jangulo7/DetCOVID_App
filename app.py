@@ -19,25 +19,39 @@ st.markdown("También proporciona el porcentaje de confianza para cada predicci�
 st.markdown("Cargue una imagen de radiografía de tórax para obtener el resultado de la predicción.")
 st.markdown("---")
 
+import streamlit as st
+import requests
+from PIL import Image
+from io import BytesIO
+
 uploaded_image = st.file_uploader("📁 Cargar radiografía", type=["png", "jpg", "jpeg"])
 
 if uploaded_image is not None:
-    image = Image.open(uploaded_image).convert("RGB")
+    # Convertimos el contenido del archivo a bytes
+    image_bytes = uploaded_image.getvalue()
+    
+    # Creamos la imagen PIL a partir de esos bytes
+    image = Image.open(BytesIO(image_bytes)).convert("RGB")
     st.image(image, caption="Cargue una radiografía", use_container_width=True)
 
     if st.button("Predict Result"):
         with st.spinner("Analyzing the image..."):
             url_backend = "https://detcovid-backend.onrender.com/predict"
-            files = {"file": (uploaded_image.name, uploaded_image.read(), uploaded_image.type)}
-
+            
+            # Reutilizamos 'image_bytes' para enviar la imagen al backend.
+            files = {
+                "file": (uploaded_image.name, image_bytes, uploaded_image.type)
+            }
+            
             try:
-                response = requests.post(url_backend, files=files, timeout=30)  # Added timeout
+                response = requests.post(url_backend, files=files, timeout=30)
                 response.raise_for_status()
                 result = response.json()
                 st.success(f"**Clasificación:** {result['classification']}")
                 st.info(f"**Confianza:** {result['confidence']}")
             except requests.exceptions.RequestException as e:
                 st.error(f"Error de comunicación con el backend: {e}")
+
 
 # --- Feedback Section ---
 st.markdown("---")
